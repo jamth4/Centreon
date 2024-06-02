@@ -12,16 +12,20 @@ username = os.getenv("CENTREON_USER")
 password = os.getenv("CENTREON_PASSWORD")
 centreon_url = os.getenv('CENTREON_URL')
 
-base_url = f"https://{centreon_url}/centreon/api/index.php?"
-auth_url = "action=authenticate"
-todo = {"username":f"{username}", "password": f"{password}"}
 
-response = requests.post(base_url+auth_url, data=todo, verify=False)
 
-cent_token = response.json()
+def cent_api (domain = centreon_url, username = username, password = password):
+    base_url = f"{domain}action=authenticate"
+    todo = {"username":f"{username}", "password": f"{password}"}
+    response = requests.post(base_url, data=todo, verify=False)
 
-print(cent_token)
+    cent_token = response.json()
 
-cent_key = cent_token['authToken']
+    print(cent_token)
 
-set_key(dotenv_file, 'CENTREON_API', cent_key)
+    cent_key = cent_token['authToken']
+
+    set_key(dotenv_file, 'CENTREON_API', cent_key) 
+
+
+cent_api()
